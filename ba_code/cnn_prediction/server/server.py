@@ -12,8 +12,8 @@ import random
 import string
 import ba_code.cnn_prediction.prediction as predict
 
-ROOT_DIR = '/Users/yast/projects/20_hobby/music-instument-recognition/ba-code/ba_code/cnn_prediction/server/'
-UPLOAD_FOLDER = os.path.join(ROOT_DIR, 'uploads')
+SERVER_PATH = os.getcwd()
+UPLOAD_FOLDER = os.path.join(SERVER_PATH, 'uploads')
 
 app = Flask(__name__)
 app.secret_key = 'F12Zr47j\3yX R~X@H!jmM]Lwf/,?KT'
@@ -31,12 +31,11 @@ def generate_filename():
     return ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(8))
 
 
-@app.route('/')
-def index():
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def catch_all(path):
+    print "requesting " + path
     return render_template('index.html')
-
-
-# TODO: redirect everything else to index.html
 
 
 @app.route('/upload', methods=['POST'])
@@ -49,7 +48,7 @@ def upload_file():
     if file_to_upload and allowed_file_extension(file_to_upload.filename):
         filename = generate_filename() + '.wav'
         file_to_upload.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        os.path.join(ROOT_DIR, filename)
+        os.path.join(SERVER_PATH, filename)
         return render_template('index.html', fname=filename)
 
     return render_template('index.html', errorMsg="There was an error...sorry!")

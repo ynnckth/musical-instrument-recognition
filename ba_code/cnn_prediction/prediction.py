@@ -15,8 +15,9 @@ from ba_code.utils import utils
 from ba_code.utils.spectrogram_tools import spectrogram_utils
 from ba_code.utils.utils import load_from_pickle
 
-CNN_WEIGTS_PATH = "/Users/yast/projects/20_hobby/music-instument-recognition/ba-code/results/full_set_model_5000/23-15_1-6-2016_net_weigths.pickle"
-CNN_Y_MAPPING_PATH = "/Users/yast/projects/20_hobby/music-instument-recognition/ba-code/results/full_set_model_5000/23-15_1-6-2016_y_mapping.pickle"
+
+CNN_WEIGHTS_PATH = os.path.normpath(os.path.join(os.getcwd(), "../trained_models/full_set_model_5000/23-15_1-6-2016_net_weights.pickle"))
+CNN_Y_MAPPING_PATH = os.path.normpath(os.path.join(os.getcwd(), "../trained_models/full_set_model_5000/23-15_1-6-2016_y_mapping.pickle"))
 
 global_cnn = None
 global_y_mapping = None
@@ -173,13 +174,13 @@ def load_net():
 
     net.batch_iterator_test = TestSegmentBatchIterator(batch_size=settings.MINI_BATCH_SIZE)
     y_mapping = load_from_pickle(CNN_Y_MAPPING_PATH)
-    net.load_params_from(CNN_WEIGTS_PATH)
+    net.load_params_from(CNN_WEIGHTS_PATH)
 
     return net, y_mapping
 
 
 def initialize_cnn():
-    print('Loading cnn model from %s' % CNN_WEIGTS_PATH)
+    print('Loading cnn model from %s' % CNN_WEIGHTS_PATH)
     cnn, y_mapping = load_net()
 
     global global_cnn, global_y_mapping
@@ -215,7 +216,7 @@ def predict_instrument(file_path):
 
 
 def main(file_path):
-    print('Loading model from %s' % CNN_WEIGTS_PATH)
+    print('Loading model from %s' % CNN_WEIGHTS_PATH)
     cnn, y_mapping = load_net()
 
     print('Preparing audio file...')
@@ -237,5 +238,5 @@ def main(file_path):
     return predictions, proba_predictions
 
 
-# if __name__ == "__main__":
-#     main("PATH_TO_WAV_FILE")
+if __name__ == "__main__":
+    main("PATH_TO_WAV_FILE")
