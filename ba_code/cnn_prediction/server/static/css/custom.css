@@ -1,0 +1,59 @@
+html, body {
+    height: 100%;
+}
+
+#uploadBtn {
+    width: 90px;
+    overflow: hidden;
+}
+
+#barchart {
+    float: left;
+}
+
+#chartLegend {
+    float: left;
+    margin-top: 100px;
+}
+
+#play_audio {
+    margin-top: 20px;
+}
+
+.footer {
+    position: relative;
+    margin-top: -150px; /* negative value of footer height */
+    height: 150px;
+    clear: both;
+    padding-top: 20px;
+}
+
+#wrap {
+    min-height: 100%;
+    overflow: auto;
+    padding-bottom: 150px;
+}
+
+.navigation:link {
+    color: #000000;
+    text-decoration: none;
+}
+
+.navigation:visited {
+    color: #000000;
+    text-decoration: none;
+}
+
+.navigation:hover {
+    color: #000000;
+    text-decoration: none;
+}
+
+.navigation:active {
+    color: #000000;
+    text-decoration: none;
+}
+
+#errorContainer {
+    margin-top: 15px;
+}
