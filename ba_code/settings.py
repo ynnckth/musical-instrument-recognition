@@ -30,6 +30,3 @@ MINI_SEGMENTS_IN_SEGMENT = int(SEGMENT_LENGTH / MINI_SEGMENT_LENGTH)
 
 TRAIN_TEST_RATIO = 0.8  # 0.8 of the data is used for training
 VAL_TRAIN_RATIO = 0.2   # 0.2 of the whole is used for validation
-
-# Paths
-RESULTS_PATH = "/home/ba16-stdm-streit/results"

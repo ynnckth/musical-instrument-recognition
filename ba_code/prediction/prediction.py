@@ -10,7 +10,7 @@ from pydub import AudioSegment
 from pydub.silence import split_on_silence
 
 from ba_code import settings
-from ba_code.cnn_training.test_batchiterator import TestSegmentBatchIterator
+from ba_code.prediction.test_batchiterator import TestSegmentBatchIterator
 from ba_code.utils import utils
 from ba_code.utils.spectrogram_tools import spectrogram_utils
 from ba_code.utils.utils import load_from_pickle

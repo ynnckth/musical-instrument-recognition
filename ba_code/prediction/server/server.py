@@ -10,7 +10,7 @@ from flask import (
 import os
 import random
 import string
-import ba_code.cnn_prediction.prediction as predict
+import ba_code.prediction.prediction as predict
 
 SERVER_PATH = os.getcwd()
 UPLOAD_FOLDER = os.path.join(SERVER_PATH, 'uploads')
@@ -48,10 +48,9 @@ def upload_file():
     if file_to_upload and allowed_file_extension(file_to_upload.filename):
         filename = generate_filename() + '.wav'
         file_to_upload.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        os.path.join(SERVER_PATH, filename)
         return render_template('index.html', fname=filename)
 
-    return render_template('index.html', errorMsg="There was an error...sorry!")
+    return render_template('index.html', errorMsg="There was an error uploading the file")
 
 
 @app.route('/uploads/<filename>')
@@ -63,8 +62,8 @@ def uploaded_file(filename):
 def predict_probabilities():
     filename = request.form['filename']
     filepath = os.path.join(UPLOAD_FOLDER, filename)
-    proba_predictions, classified_instrument, score = predict.predict_instrument(filepath)
-    session['predictions'] = proba_predictions
+    prediction_probabilities, classified_instrument, score = predict.predict_instrument(filepath)
+    session['predictions'] = prediction_probabilities
     session['classified_instrument'] = classified_instrument
     session['score'] = round(score * 100, 2)
     return render_template('index.html', proba="True", fname=filename)
