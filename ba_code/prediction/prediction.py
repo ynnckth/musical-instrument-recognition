@@ -1,8 +1,7 @@
+import os
 import subprocess
 
-import os
 import numpy as np
-
 from lasagne import layers
 from lasagne import nonlinearities
 from nolearn.lasagne import NeuralNet
@@ -11,10 +10,8 @@ from pydub.silence import split_on_silence
 
 from ba_code import settings
 from ba_code.prediction.test_batchiterator import TestSegmentBatchIterator
-from ba_code.utils import utils
-from ba_code.utils.spectrogram_tools import spectrogram_utils
-from ba_code.utils.utils import load_from_pickle
-
+from ba_code.prediction.utils.spectrogram_tools import spectrogram_utils
+from ba_code.prediction.utils import utils
 
 CNN_WEIGHTS_PATH = os.path.normpath(os.path.join(os.getcwd(), "../trained_models/full_set_model_5000/23-15_1-6-2016_net_weights.pickle"))
 CNN_Y_MAPPING_PATH = os.path.normpath(os.path.join(os.getcwd(), "../trained_models/full_set_model_5000/23-15_1-6-2016_y_mapping.pickle"))
@@ -173,7 +170,7 @@ def load_net():
     )
 
     net.batch_iterator_test = TestSegmentBatchIterator(batch_size=settings.MINI_BATCH_SIZE)
-    y_mapping = load_from_pickle(CNN_Y_MAPPING_PATH)
+    y_mapping = utils.load_from_pickle(CNN_Y_MAPPING_PATH)
     net.load_params_from(CNN_WEIGHTS_PATH)
 
     return net, y_mapping

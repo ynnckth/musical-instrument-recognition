@@ -60,13 +60,13 @@ def uploaded_file(filename):
 
 @app.route('/predict', methods=['POST'])
 def predict_probabilities():
-    filename = request.form['filename']
-    filepath = os.path.join(UPLOAD_FOLDER, filename)
-    prediction_probabilities, classified_instrument, score = predict.predict_instrument(filepath)
+    file_to_predict = request.form['filename']
+    prediction_probabilities, classified_instrument, score = \
+        predict.predict_instrument(os.path.join(UPLOAD_FOLDER, file_to_predict))
     session['predictions'] = prediction_probabilities
     session['classified_instrument'] = classified_instrument
     session['score'] = round(score * 100, 2)
-    return render_template('index.html', proba="True", fname=filename)
+    return render_template('index.html', proba="True", fname=file_to_predict)
 
 
 if __name__ == "__main__":
