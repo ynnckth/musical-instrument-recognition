@@ -12,9 +12,9 @@ import sys
 import librosa
 import matplotlib.pyplot as plt
 import numpy as np
-
 from ba_code.prediction import settings
-from ba_code.prediction.utils import mel_spectrogram_from_raw_audio
+
+from prediction.utils import mel_spectrogram_from_raw_audio
 
 arguments = sys.argv
 file_name = ""

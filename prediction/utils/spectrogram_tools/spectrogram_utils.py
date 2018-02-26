@@ -2,7 +2,7 @@ import librosa
 import matplotlib.pyplot as plt
 import numpy as np
 
-from ba_code.prediction import settings
+from prediction import settings
 
 
 # Splits a signal from a wav file into segments of the specified length

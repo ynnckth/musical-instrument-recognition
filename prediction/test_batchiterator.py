@@ -1,7 +1,7 @@
 import numpy as np
 from nolearn.lasagne import BatchIterator
 
-import ba_code.prediction.utils.utils as utils
+import utils.utils as utils
 
 
 class TestSegmentBatchIterator(BatchIterator):

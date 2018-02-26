@@ -4,7 +4,7 @@ import math
 import numpy as np
 from scipy.interpolate import UnivariateSpline
 
-from ba_code.prediction import settings
+from prediction import settings
 
 
 def save_train_set(train_set, path):

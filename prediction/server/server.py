@@ -1,3 +1,7 @@
+import os
+import random
+import string
+
 from flask import (
     Flask,
     flash,
@@ -7,10 +11,7 @@ from flask import (
     send_from_directory,
     session)
 
-import os
-import random
-import string
-import ba_code.prediction.prediction as predict
+import prediction.prediction as predict
 
 SERVER_PATH = os.getcwd()
 UPLOAD_FOLDER = os.path.join(SERVER_PATH, 'uploads')
