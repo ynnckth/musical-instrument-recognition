@@ -16,7 +16,7 @@ from utils.spectrogram_tools import spectrogram_utils
 CNN_WEIGHTS_PATH = os.path.normpath(os.path.join(os.getcwd(), "../trained_models/full_set_model_5000/23-15_1-6-2016_net_weights.pickle"))
 CNN_Y_MAPPING_PATH = os.path.normpath(os.path.join(os.getcwd(), "../trained_models/full_set_model_5000/23-15_1-6-2016_y_mapping.pickle"))
 
-global_cnn = None
+trained_cnn_model = None
 global_y_mapping = None
 
 
@@ -180,8 +180,8 @@ def initialize_model():
     print('Loading cnn model from %s' % CNN_WEIGHTS_PATH)
     cnn, y_mapping = init_cnn()
 
-    global global_cnn, global_y_mapping
-    global_cnn = cnn
+    global trained_cnn_model, global_y_mapping
+    trained_cnn_model = cnn
     global_y_mapping = y_mapping
 
 
@@ -199,16 +199,15 @@ def predict_instrument(audio_file_path):
 
     print('Predicting...')
 
-    proba_predictions = global_cnn.predict_proba(Xb)
-
+    prediction_probabilities = trained_cnn_model.predict_proba(Xb)
     predictions = dict()
-    proba_mean = np.mean(proba_predictions, axis=0)
+
+    proba_mean = np.mean(prediction_probabilities, axis=0)
     for instrument_idx, instrument_name in global_y_mapping.items():
         predictions[instrument_name] = round(proba_mean[instrument_idx], 3)
 
     classified_instrument = global_y_mapping[np.argmax(proba_mean)]
     score = proba_mean[np.argmax(proba_mean)]
-
     return predictions, classified_instrument, score
 
 
