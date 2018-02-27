@@ -71,5 +71,5 @@ def predict_probabilities():
 
 
 if __name__ == "__main__":
-    predict.initialize_cnn()
+    predict.initialize_model()
     app.run(host='0.0.0.0', port=9002, debug=False, threaded=True)

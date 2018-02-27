@@ -47,11 +47,11 @@ def create_segments(audio_file_path):
     return instrument_segments
 
 
-def get_spectrograms_from_filepath(wav_file_path):
+def get_spectrograms_from_filepath(audio_file_path):
     instrument_segments = []
     list_idx = 0
 
-    signal, sampling_rate = spectrogram_utils.raw_audio_data(wav_file_path)
+    signal, sampling_rate = spectrogram_utils.raw_audio_data(audio_file_path)
     # split wav_file into 10 second segments
     segments = segment_signal(signal, sampling_rate, settings.SEGMENT_SECONDS)
     for segment_idx in range(len(segments)):
@@ -62,10 +62,10 @@ def get_spectrograms_from_filepath(wav_file_path):
         # remove last frame. see librosa:util/utils.py:91
         spectrogram = np.delete(spectrogram, [len(spectrogram) - 1], 0)
         if not np.count_nonzero(spectrogram):
-            print "zero spectrogram in " + str(wav_file_path)
+            print "zero spectrogram in " + str(audio_file_path)
         instrument_segments.append([])
         instrument_segments[list_idx].append(spectrogram)
-        instrument_segments[list_idx].append(wav_file_path)
+        instrument_segments[list_idx].append(audio_file_path)
         instrument_segments[list_idx].append(segment_idx)
         list_idx += 1
     return instrument_segments
@@ -116,7 +116,6 @@ def segment_signal(signal, sampling_rate, segmentation_length):
 
 def create_X_and_y(instrument_segments):
     X_test = []
-    y_test = []
     test_metainfo = []
 
     test_counter = 0
@@ -136,7 +135,7 @@ def create_X_and_y(instrument_segments):
     return X_test, y_test, test_metainfo
 
 
-def load_net():
+def init_cnn():
     net = NeuralNet(
         layers=[
             # input layer
@@ -176,22 +175,23 @@ def load_net():
     return net, y_mapping
 
 
-def initialize_cnn():
+# Initializes the cnn model
+def initialize_model():
     print('Loading cnn model from %s' % CNN_WEIGHTS_PATH)
-    cnn, y_mapping = load_net()
+    cnn, y_mapping = init_cnn()
 
     global global_cnn, global_y_mapping
     global_cnn = cnn
     global_y_mapping = y_mapping
 
 
-def predict_instrument(file_path):
-    print('File preparation')
+def predict_instrument(audio_file_path):
+    print('Preparing audio file...')
 
-    normalize_volume(file_path)
-    remove_silence(file_path)
+    normalize_volume(audio_file_path)
+    remove_silence(audio_file_path)
 
-    instrument_segments = create_segments(file_path)
+    instrument_segments = create_segments(audio_file_path)
     X, y, metainfo = create_X_and_y(instrument_segments)
 
     Xb, yb, metainfo = utils.extract_mini_segments_with_metainfo(X, y, metainfo)
@@ -212,16 +212,16 @@ def predict_instrument(file_path):
     return predictions, classified_instrument, score
 
 
-def main(file_path):
+def main(audio_file_path):
     print('Loading model from %s' % CNN_WEIGHTS_PATH)
-    cnn, y_mapping = load_net()
+    cnn, y_mapping = init_cnn()
 
     print('Preparing audio file...')
 
-    normalize_volume(file_path)
-    remove_silence(file_path)
+    normalize_volume(audio_file_path)
+    remove_silence(audio_file_path)
 
-    instrument_segments = create_segments(file_path)
+    instrument_segments = create_segments(audio_file_path)
     X, y, metainfo = create_X_and_y(instrument_segments)
 
     Xb, yb, metainfo = utils.extract_mini_segments_with_metainfo(X, y, metainfo)
