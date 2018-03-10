@@ -13,8 +13,8 @@ from pydub.silence import split_on_silence
 from utils.spectrogram_tools import spectrogram_utils
 
 
-CNN_WEIGHTS_PATH = os.path.normpath(os.path.join(os.getcwd(), "../trained_models/full_set_model_5000/23-15_1-6-2016_net_weights.pickle"))
-CNN_Y_MAPPING_PATH = os.path.normpath(os.path.join(os.getcwd(), "../trained_models/full_set_model_5000/23-15_1-6-2016_y_mapping.pickle"))
+CNN_WEIGHTS_PATH = os.path.normpath(os.path.join(os.getcwd(), "prediction/trained_models/full_set_model_5000/23-15_1-6-2016_net_weights.pickle"))
+CNN_Y_MAPPING_PATH = os.path.normpath(os.path.join(os.getcwd(), "prediction/trained_models/full_set_model_5000/23-15_1-6-2016_y_mapping.pickle"))
 
 trained_cnn_model = None
 global_y_mapping = None
@@ -25,7 +25,7 @@ def normalize_volume(audio_file_path):
     path_without_ext, extension = os.path.splitext(audio_file_path)
     original_filename = os.path.basename(path_without_ext)
     tmp_normalized_path = os.path.join(os.path.dirname(audio_file_path), original_filename + "_tmp" + extension)
-    subprocess.check_output(['/usr/local/bin/sox', '--norm=-5', audio_file_path, tmp_normalized_path])
+    subprocess.check_output(['sox', '--norm=-5', audio_file_path, tmp_normalized_path])
     os.rename(tmp_normalized_path, audio_file_path)
 
 

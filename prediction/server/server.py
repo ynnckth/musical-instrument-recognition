@@ -13,7 +13,7 @@ from flask import (
 
 import prediction.prediction as predict
 
-SERVER_PATH = os.getcwd()
+SERVER_PATH = "prediction/server"
 UPLOAD_FOLDER = os.path.join(SERVER_PATH, 'uploads')
 
 app = Flask(__name__)
@@ -56,7 +56,7 @@ def upload_file():
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+    return send_from_directory('/app/prediction/server/uploads', filename)
 
 
 @app.route('/predict', methods=['POST'])
