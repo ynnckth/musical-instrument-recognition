@@ -12,8 +12,9 @@ WORKDIR /app
 ENV PYTHONPATH /app
 
 ADD . .
+
+RUN pip install --upgrade pip==19.2.3
 RUN pip install --upgrade --default-timeout=100 -r requirements.txt  
-RUN pip install --upgrade matplotlib
 
 EXPOSE 9002
 
