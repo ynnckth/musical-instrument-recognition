@@ -18,4 +18,4 @@ RUN pip install --upgrade --default-timeout=100 -r requirements.txt  
 
 EXPOSE 9002
 
-CMD ["python", "-u", "./src/server.py"] 
+CMD ["python", "-u", "./bastdm5/server.py"] 

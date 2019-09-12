@@ -13,7 +13,7 @@ from flask import (
 
 import classification.prediction as predict
 
-UPLOAD_FOLDER = os.path.join('src', 'uploads')
+UPLOAD_FOLDER = os.path.join('bastdm5', 'uploads')
 
 app = Flask(__name__)
 app.secret_key = 'F12Zr47j\3yX R~X@H!jmM]Lwf/,?KT'
@@ -55,7 +55,7 @@ def upload_file():
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
-    return send_from_directory('/app/src/uploads', filename)
+    return send_from_directory('/app/bastdm5/uploads', filename)
 
 
 @app.route('/predict', methods=['POST'])

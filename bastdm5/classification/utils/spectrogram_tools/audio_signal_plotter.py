@@ -12,9 +12,9 @@ import sys
 import librosa
 import matplotlib.pyplot as plt
 import numpy as np
-from src.classification import settings
+from bastdm5.classification import settings
 
-from src.classification.utils import mel_spectrogram_from_raw_audio
+from bastdm5.classification.utils import mel_spectrogram_from_raw_audio
 
 arguments = sys.argv
 file_name = ""
