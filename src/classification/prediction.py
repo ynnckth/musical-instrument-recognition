@@ -2,19 +2,19 @@ import os
 import subprocess
 
 import numpy as np
-import settings
-from test_batchiterator import TestSegmentBatchIterator
-from utils import utils
 from lasagne import layers
 from lasagne import nonlinearities
 from nolearn.lasagne import NeuralNet
 from pydub import AudioSegment
 from pydub.silence import split_on_silence
-from utils.spectrogram_tools import spectrogram_utils
+from src.classification.test_batchiterator import TestSegmentBatchIterator
+from src.classification.utils.spectrogram_tools import spectrogram_utils
 
+import src.classification.settings
+from src.classification.utils import utils
 
-CNN_WEIGHTS_PATH = os.path.normpath(os.path.join(os.getcwd(), "prediction/trained_models/full_set_model_5000/23-15_1-6-2016_net_weights.pickle"))
-CNN_Y_MAPPING_PATH = os.path.normpath(os.path.join(os.getcwd(), "prediction/trained_models/full_set_model_5000/23-15_1-6-2016_y_mapping.pickle"))
+CNN_WEIGHTS_PATH = os.path.normpath(os.path.join(os.getcwd(), "src/classification/trained_models/full_set_model_5000/23-15_1-6-2016_net_weights.pickle"))
+CNN_Y_MAPPING_PATH = os.path.normpath(os.path.join(os.getcwd(), "src/classification/trained_models/full_set_model_5000/23-15_1-6-2016_y_mapping.pickle"))
 
 trained_cnn_model = None
 global_y_mapping = None
@@ -53,7 +53,7 @@ def get_spectrograms_from_filepath(audio_file_path):
 
     signal, sampling_rate = spectrogram_utils.raw_audio_data(audio_file_path)
     # split wav_file into 10 second segments
-    segments = segment_signal(signal, sampling_rate, settings.SEGMENT_SECONDS)
+    segments = segment_signal(signal, sampling_rate, src.classification.settings.SEGMENT_SECONDS)
     for segment_idx in range(len(segments)):
         # for each segment generate spectrogram
         spectrogram = spectrogram_utils.mel_spectrogram_from_raw_audio(segments[segment_idx], sampling_rate)
@@ -79,11 +79,12 @@ def dynamic_compression(spectrogram):
 
 
 def filter_zero_segments(instrument_segments):
-    SEGMENT_MAX_ZERO_THRESHOLD = int(settings.SEGMENT_LENGTH * settings.MEL_DATA_POINTS * 0.9)
+    SEGMENT_MAX_ZERO_THRESHOLD = int(
+        src.classification.settings.SEGMENT_LENGTH * src.classification.settings.MEL_DATA_POINTS * 0.9)
     clean_instrument_segments = []
     segment_idx = 0
     for segment in instrument_segments:
-        zeros_in_segment = settings.SEGMENT_LENGTH * settings.MEL_DATA_POINTS - np.count_nonzero(segment[0])
+        zeros_in_segment = src.classification.settings.SEGMENT_LENGTH * src.classification.settings.MEL_DATA_POINTS - np.count_nonzero(segment[0])
         if zeros_in_segment < SEGMENT_MAX_ZERO_THRESHOLD:
             clean_instrument_segments.append([])
             clean_instrument_segments[segment_idx].append(segment[0])
@@ -140,7 +141,7 @@ def init_cnn():
         layers=[
             # input layer
             (layers.InputLayer,
-             {'shape': (None, settings.CHANNELS, settings.MINI_SEGMENT_LENGTH, settings.MEL_DATA_POINTS)}),
+             {'shape': (None, src.classification.settings.CHANNELS, src.classification.settings.MINI_SEGMENT_LENGTH, src.classification.settings.MEL_DATA_POINTS)}),
 
             # convolution layers 1
             (layers.Conv2DLayer, {'num_filters': 32, 'filter_size': (8, 1)}),
@@ -168,7 +169,7 @@ def init_cnn():
         verbose=1,
     )
 
-    net.batch_iterator_test = TestSegmentBatchIterator(batch_size=settings.MINI_BATCH_SIZE)
+    net.batch_iterator_test = TestSegmentBatchIterator(batch_size=src.classification.settings.MINI_BATCH_SIZE)
     y_mapping = utils.load_from_pickle(CNN_Y_MAPPING_PATH)
     net.load_params_from(CNN_WEIGHTS_PATH)
 

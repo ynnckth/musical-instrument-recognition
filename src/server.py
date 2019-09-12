@@ -11,10 +11,9 @@ from flask import (
     send_from_directory,
     session)
 
-import prediction.prediction as predict
+import classification.prediction as predict
 
-SERVER_PATH = "prediction/server"
-UPLOAD_FOLDER = os.path.join(SERVER_PATH, 'uploads')
+UPLOAD_FOLDER = os.path.join('src', 'uploads')
 
 app = Flask(__name__)
 app.secret_key = 'F12Zr47j\3yX R~X@H!jmM]Lwf/,?KT'
@@ -56,14 +55,13 @@ def upload_file():
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
-    return send_from_directory('/app/prediction/server/uploads', filename)
+    return send_from_directory('/app/src/uploads', filename)
 
 
 @app.route('/predict', methods=['POST'])
 def predict_probabilities():
     file_to_predict = request.form['filename']
-    prediction_probabilities, classified_instrument, score = \
-        predict.predict_instrument(os.path.join(UPLOAD_FOLDER, file_to_predict))
+    prediction_probabilities, classified_instrument, score = predict.predict_instrument(os.path.join(UPLOAD_FOLDER, file_to_predict))
     session['predictions'] = prediction_probabilities
     session['classified_instrument'] = classified_instrument
     session['score'] = round(score * 100, 2)

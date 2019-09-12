@@ -13,3 +13,16 @@ SSH to container:
 
 Show app logs:  
 `docker logs <container_id>`
+
+
+#### Development
+
+Create a virtual environment: 
+> `virtualenv env`
+
+Activate environment
+> `source env/bin/activate`
+
+Install dependencies
+> `pip install -r requirements.txt`
+
