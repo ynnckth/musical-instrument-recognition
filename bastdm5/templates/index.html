@@ -38,7 +38,7 @@
         {% if fname %}
             <div id="play_audio">
                 <audio controls>
-                    <source src="{{ url_for('uploaded_file', filename=fname) }}" type="audio/wav">
+                    <source src="{{ url_for('get_uploaded_sound_file', filename=fname) }}" type="audio/wav">
                     Your browser does not support the audio element.
                 </audio>
             </div>
@@ -135,10 +135,5 @@
             {% endif %}
         {% endif %}
 	</div>
-    <footer class="footer">
-        <div class="container">
-            <p class="text-muted">Bachelor Thesis ba16_stdm_5 - Y. Streit, L. Zulfiu.</p>
-        </div>
-    </footer>
 </body>
 </html>

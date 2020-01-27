@@ -1,4 +1,3 @@
-
 FROM ubuntu:16.04
 
 RUN apt-get update && \
@@ -13,9 +12,9 @@ ENV PYTHONPATH /app
 
 ADD . .
 
-RUN pip install --upgrade pip==19.2.3
-RUN pip install --upgrade --default-timeout=100 -r requirements.txt  
+RUN pip install --upgrade pip==20.0.2
+RUN pip install --upgrade --default-timeout=100 -r requirements.txt
 
 EXPOSE 9002
 
-CMD ["python", "-u", "./bastdm5/server.py"] 
+CMD ["python", "-u", "./bastdm5/server.py"]

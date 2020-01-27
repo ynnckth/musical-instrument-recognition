@@ -1,30 +1,25 @@
+# Musical Instrument Recognition
 
-Create a docker image with the tag "musical-instrument-prediction"  
-`docker build -t musical-instrument-prediction .`
+## Run locally
 
-Run a container mapping your machine's port 9002 to the container's exposed port 9002:  
-`docker run -p 9002:9002 musical-instrument-prediction`
+**Build**  
+> `$ docker build -t bastdm5 .`
+
+**Run**  
+> `$ docker run -p 9002:9002 bastdm5`
 
 => go to http://localhost:9002
 
-List all running containers:  
-`docker ps`
 
-SSH to container:  
-`docker exec -it <container_id> bash`
-
-Show app logs:  
-`docker logs <container_id>`
-
-
-#### Development
+## Development
 
 Create a virtual environment: 
-> `virtualenv env`
+> `$ virtualenv venv`
 
-Activate environment
-> `source env/bin/activate`
+Activate virtual environment:
+> `$ source venv/bin/activate`
 
-Install dependencies
-> `pip install -r requirements.txt`
+Install dependencies:
+> `$ pip install -r requirements.txt`
 
+Optional: set the project interpreter of your IDE to the virtual environment
