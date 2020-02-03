@@ -8,7 +8,7 @@ funcsigs==1.0.2
 gdbn==0.1
 gnumpy==0.2
 itsdangerous==0.24
-Jinja2==2.10
+Jinja2==2.10.1
 joblib==0.11
 Lasagne==0.1
 librosa==0.6.0
@@ -26,5 +26,5 @@ singledispatch==3.4.0.3
 six==1.11.0
 tabulate==0.8.2
 Theano==0.8
-Werkzeug==0.14.1
+Werkzeug==0.15.3
 matplotlib==2.2.2

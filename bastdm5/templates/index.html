@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>ba16_stdm_5</title>
@@ -15,125 +16,136 @@
 
 <body>
     <div id="wrap" class="container">
-	    <h2><a class="navigation" href="/">Musical Instrument Recognition</a></h2>
+        <h2><a class="navigation" href="/">Musical Instrument Recognition</a></h2>
         <p>This system is able tho classify musical instruments from monophonic audio files. The following instrument
-        classes are supported: Vocals Male, Vocals Female, Acoustic Guitar, Electric Guitar, Electric Bass and Drums.</p>
-	    <form id="uploadForm" method="POST" action="/upload" enctype="multipart/form-data">
-	        <hr>
-	        <h5>Select WAV-File to upload</h5>
+            classes are supported: Vocals Male, Vocals Female, Acoustic Guitar, Electric Guitar, Electric Bass and
+            Drums.</p>
+        
+        <hr>
+        <form id="uploadForm" method="POST" action="/upload" enctype="multipart/form-data">
+            <h5>Select sound file in wave format or record directly</h5>
             <label id="pseudoUploadButton" class="btn btn-primary btn-file">
                 Browse...<input id="uploadField" name="file" type="file" style="display: none;">
             </label>
+
+            <button id="record-button" class="btn btn-primary btn-file" type="button">Record</button>
         </form>
 
-        <img id="loadingFile" src="../static/imgs/loadingimage.gif" style="display: none;" />
+        <img id="spinner" src="../static/imgs/loadingimage.gif" style="display: none;" />
 
         {% if errorMsg %}
-            <div id="errorContainer" class="alert alert-danger">
-                {{errorMsg}}
-            </div>
+        <div id="errorContainer" class="alert alert-danger">
+            {{errorMsg}}
+        </div>
         {% endif %}
 
         <!-- display audio player if file was uploaded -->
         {% if fname %}
-            <div id="play_audio">
-                <audio controls>
-                    <source src="{{ url_for('get_uploaded_sound_file', filename=fname) }}" type="audio/wav">
-                    Your browser does not support the audio element.
-                </audio>
-            </div>
-            <hr>
+        <div id="play_audio">
+            <audio controls>
+                <source src="{{ url_for('get_uploaded_sound_file', filename=fname) }}" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
+        <hr>
 
-            {% if proba %}
-                <p>Recognised instrument: <strong>{{session['classified_instrument']}}</strong> with a probability of <strong>{{session['score']}}%</strong></p>
-            {% else %}
-                <form method="POST" action="/predict">
-                    <input type="hidden" value="{{fname}}" name="filename">
-                    <input id="predictBtn" class="btn btn-success" type="submit" value="Predict">
-                </form>
-                <img id="predictingFile" src="../static/imgs/loadingimage.gif" style="display: none;" />
-            {% endif %}
+        {% if proba %}
+        <p>Recognised instrument: <strong>{{session['classified_instrument']}}</strong> with a probability of
+            <strong>{{session['score']}}%</strong>
+        </p>
+        {% else %}
+        <form method="POST" action="/predict">
+            <input type="hidden" value="{{fname}}" name="filename">
+            <input id="predictBtn" class="btn btn-success" type="submit" value="Predict">
+        </form>
+        <img id="predictingFile" src="../static/imgs/loadingimage.gif" style="display: none;" />
+        {% endif %}
 
-            <hr>
+        <hr>
 
-            <!-- display classification results if defined -->
-            {% if proba %}
-                <h4>Classification Results</h4>
+        <!-- display classification results if defined -->
+        {% if proba %}
+        <h4>Classification Results</h4>
 
-                <div>
-                    <div id="barchart">
-                        <canvas id="myChart" width="500" height="350"></canvas>
-                        <script>
-                        var ctx = document.getElementById("myChart");
+        <div>
+            <div id="barchart">
+                <canvas id="myChart" width="500" height="350"></canvas>
+                <script>
+                    var ctx = document.getElementById("myChart");
 
-                        var vocs_m = {{session['predictions']['vocals_male']}};
-                        var bass = {{session['predictions']['bass']}};
-                        var e_guit = {{session['predictions']['electric_guitar']}};
-                        var drums = {{session['predictions']['overhead']}};
-                        var vocs_f = {{session['predictions']['vocals_female']}};
-                        var a_guit = {{session['predictions']['acoustic_guitar']}};
+                    var vocs_m = {{ session['predictions']['vocals_male'] }};
+                    var bass = {{ session['predictions']['bass'] }};
+                    var e_guit = {{ session['predictions']['electric_guitar'] }};
+                    var drums = {{ session['predictions']['overhead'] }};
+                    var vocs_f = {{ session['predictions']['vocals_female'] }};
+                    var a_guit = {{ session['predictions']['acoustic_guitar'] }};
 
-                        Chart.defaults.global.legend.display = false;
-                        Chart.defaults.global.animation.duration = 3000;
+                    Chart.defaults.global.legend.display = false;
+                    Chart.defaults.global.animation.duration = 3000;
 
-                        var myChart = new Chart(ctx, {
-                            type: 'bar',
-                            data: {
-                                labels: ["Voc. M", "Bass", "E-Guit.", "Drums", "Voc. F", "A-Guit."],
-                                datasets: [{
-                                    label: 'Score',
-                                    data: [vocs_m, bass, e_guit, drums, vocs_f, a_guit],
-                                    backgroundColor: [
-                                        'rgba(255, 99, 132, 0.2)',
-                                        'rgba(54, 162, 235, 0.2)',
-                                        'rgba(255, 206, 86, 0.2)',
-                                        'rgba(75, 192, 192, 0.2)',
-                                        'rgba(153, 102, 255, 0.2)',
-                                        'rgba(255, 159, 64, 0.2)'
-                                    ],
-                                    borderColor: [
-                                        'rgba(255,99,132,1)',
-                                        'rgba(54, 162, 235, 1)',
-                                        'rgba(255, 206, 86, 1)',
-                                        'rgba(75, 192, 192, 1)',
-                                        'rgba(153, 102, 255, 1)',
-                                        'rgba(255, 159, 64, 1)'
-                                    ],
-                                    borderWidth: 1
+                    var myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: ["Voc. M", "Bass", "E-Guit.", "Drums", "Voc. F", "A-Guit."],
+                            datasets: [{
+                                label: 'Score',
+                                data: [vocs_m, bass, e_guit, drums, vocs_f, a_guit],
+                                backgroundColor: [
+                                    'rgba(255, 99, 132, 0.2)',
+                                    'rgba(54, 162, 235, 0.2)',
+                                    'rgba(255, 206, 86, 0.2)',
+                                    'rgba(75, 192, 192, 0.2)',
+                                    'rgba(153, 102, 255, 0.2)',
+                                    'rgba(255, 159, 64, 0.2)'
+                                ],
+                                borderColor: [
+                                    'rgba(255,99,132,1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(255, 206, 86, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(153, 102, 255, 1)',
+                                    'rgba(255, 159, 64, 1)'
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true
+                                    },
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: 'Class Probabilities'
+                                    }
                                 }]
                             },
-                            options: {
-                                scales: {
-                                    yAxes: [{
-                                        ticks: {
-                                            beginAtZero:true
-                                        },
-                                        scaleLabel: {
-                                            display: true,
-                                            labelString: 'Class Probabilities'
-                                        }
-                                    }]
-                                },
-                                maintainAspectRatio: false,
-                                responsive: false
-                            }
-                        });
-                        </script>
-                    </div>
+                            maintainAspectRatio: false,
+                            responsive: false
+                        }
+                    });
 
-                    <div id="chartLegend">
-                        <ul>
-                            <li><strong>Vocals Male: &nbsp;</strong>{{session['predictions']['vocals_male']}}</li>
-                            <li><strong>Bass: &nbsp;</strong>{{session['predictions']['bass']}}</li>
-                            <li><strong>Electric Guitar: &nbsp;</strong>{{session['predictions']['electric_guitar']}}</li>
-                            <li><strong>Drums: &nbsp;</strong>{{session['predictions']['overhead']}}</li>
-                            <li><strong>Vocals Female: &nbsp;</strong>{{session['predictions']['vocals_female']}}</li>
-                            <li><strong>Acoustic Guitar: &nbsp;</strong>{{session['predictions']['acoustic_guitar']}}</li>
-                        </ul>
-                    </div>
-                </div>
-            {% endif %}
+
+                </script>
+            </div>
+
+            <div id="chartLegend">
+                <ul>
+                    <li><strong>Vocals Male: &nbsp;</strong>{{session['predictions']['vocals_male']}}</li>
+                    <li><strong>Bass: &nbsp;</strong>{{session['predictions']['bass']}}</li>
+                    <li><strong>Electric Guitar: &nbsp;</strong>{{session['predictions']['electric_guitar']}}</li>
+                    <li><strong>Drums: &nbsp;</strong>{{session['predictions']['overhead']}}</li>
+                    <li><strong>Vocals Female: &nbsp;</strong>{{session['predictions']['vocals_female']}}</li>
+                    <li><strong>Acoustic Guitar: &nbsp;</strong>{{session['predictions']['acoustic_guitar']}}</li>
+                </ul>
+            </div>
+        </div>
         {% endif %}
-	</div>
+        {% endif %}
+    </div>
+    <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
+    <script src="../static/js/recorder.js"></script>
 </body>
+
 </html>

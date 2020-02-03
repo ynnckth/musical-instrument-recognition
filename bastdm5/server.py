@@ -44,6 +44,7 @@ def upload_sound_file():
     if file_to_upload and allowed_file_extension(file_to_upload.filename):
         filename = generate_random_filename() + '.wav'
         file_to_upload.save(os.path.join(UPLOAD_FOLDER, filename))
+        print 'saved audio file with name: ' + filename
         return render_template('index.html', fname=filename)
 
     return render_template('index.html', errorMsg='There was an error uploading the file')

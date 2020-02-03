@@ -13,6 +13,11 @@
 
 ## Development
 
+Run container and mount source code into the container:
+> `$ docker run -it -p 9002:9002 -v /.../musical-instrument-recognition:/app bastdm5`
+
+$ docker run -it -p 9002:9002 -v /Users/yast/workspace/hobby/musical-instrument-recognition:/app bastdm5
+
 Create a virtual environment: 
 > `$ virtualenv venv`
 
@@ -22,4 +27,3 @@ Activate virtual environment:
 Install dependencies:
 > `$ pip install -r requirements.txt`
 
-Optional: set the project interpreter of your IDE to the virtual environment
