@@ -23,12 +23,12 @@
         
         <hr>
         <form id="uploadForm" method="POST" action="/upload" enctype="multipart/form-data">
-            <h5>Select sound file in wave format or record directly</h5>
+            <h5>Select sound file in wave format or directly record from the browser</h5>
             <label id="pseudoUploadButton" class="btn btn-primary btn-file">
                 Browse...<input id="uploadField" name="file" type="file" style="display: none;">
             </label>
 
-            <button id="record-button" class="btn btn-primary btn-file" type="button">Record</button>
+            <button id="record-button" class="btn btn-primary" type="button">Record</button>
         </form>
 
         <img id="spinner" src="../static/imgs/loadingimage.gif" style="display: none;" />

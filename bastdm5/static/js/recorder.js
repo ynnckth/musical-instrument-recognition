@@ -1,22 +1,24 @@
-((() => {
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    const audioContext = new AudioContext;
+((async () => {
 
     const recordButton = document.getElementById('record-button');
-
+    let isRecording = false;
     let recorder;
     let micStream;
-    let isRecording = false;
 
     const startRecording = async () => {
-        isRecording = true;
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const audioContext = new AudioContext;
+
+        const stream = await navigator.mediaDevices.getUserMedia({audio: true, video: false});
+        micStream = stream;
+        const input = audioContext.createMediaStreamSource(stream);
+        recorder = new Recorder(input, {numChannels: 1});
+
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({audio: true, video: false});
-            micStream = stream;
-            const input = audioContext.createMediaStreamSource(stream);
-            recorder = new Recorder(input, {numChannels: 1});
             recorder.record();
-            console.log("Started recording ...");
+            isRecording = true;
+            $('#record-button').text('Stop');
+            console.log('Started recording ...');
         } catch (error) {
             isRecording = false;
             console.log('Error starting recording', error);
@@ -27,6 +29,7 @@
         recorder.stop();
         micStream.getAudioTracks()[0].stop();
         isRecording = false;
+        $('#record-button').text('Record');
         console.log('Stopped recording');
     };
 
@@ -52,6 +55,7 @@
         } else {
             stopRecording();
             recorder.exportWAV(uploadRecording);
+            recorder.clear();
         }
     };
 
