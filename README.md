@@ -16,8 +16,6 @@
 Run container and mount source code into the container:
 > `$ docker run -it -p 9002:9002 -v /.../musical-instrument-recognition:/app bastdm5`
 
-$ docker run -it -p 9002:9002 -v /Users/yast/workspace/hobby/musical-instrument-recognition:/app bastdm5
-
 Create a virtual environment: 
 > `$ virtualenv venv`
 
